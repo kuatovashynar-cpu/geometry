@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Геометрия 7–9 сынып</title>
+<style>
+:root{
+  --bg:#f5f7fb; --card:#ffffff; --text:#1c2333; --muted:#5b6578; --line:#d9deea;
+  --accent:#2457c5; --accent-soft:#e4ecfb; --ok:#1b7f4b; --ok-soft:#e1f4ea; --bad:#b3261e; --bad-soft:#fbe7e5;
+  --ghost:#8a93a6; --fill:#cfe0ff; --fill2:#ffe3b8; --fill3:#d3f1dc;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#10141f; --card:#182030; --text:#e8ecf6; --muted:#a3adc2; --line:#2c3650;
+    --accent:#7aa2ff; --accent-soft:#1e2b4a; --ok:#5ed59a; --ok-soft:#173528; --bad:#ff8a80; --bad-soft:#3a1d1b;
+    --ghost:#7b869e; --fill:#243a66; --fill2:#5a4224; --fill3:#1f4630;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px 40px}
+header{padding:24px 0 8px}
+h1{font-size:1.6rem;margin:0 0 4px}
+.sub{color:var(--muted);margin:0}
+.tabs{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap}
+.tab{flex:1;min-width:120px;padding:12px 14px;border:1px solid var(--line);background:var(--card);color:var(--text);
+  border-radius:12px;font:inherit;font-weight:600;cursor:pointer}
+.tab small{display:block;font-weight:400;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.tab[aria-selected="true"] small{color:#e6edff}
+.grade{display:none}
+.grade.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:14px 0}
+.card h2{font-size:1.1rem;margin:0 0 8px;color:var(--accent)}
+.card h3{font-size:1rem;margin:12px 0 4px}
+.topic{font-size:1.35rem;margin:6px 0 0}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{border:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{background:var(--accent-soft)}
+ul,ol{margin:6px 0;padding-left:22px}
+.lab{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:720px){.lab{grid-template-columns:1.2fr 1fr}}
+svg{width:100%;height:auto;background:var(--card);border:1px solid var(--line);border-radius:10px;touch-action:none;display:block}
+.ctl{display:flex;flex-direction:column;gap:10px}
+.ctl label{display:flex;justify-content:space-between;gap:8px;font-weight:600;font-size:.95rem}
+.ctl input[type=range]{width:100%;accent-color:var(--accent)}
+.out{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:.95rem}
+.out.ok{background:var(--ok-soft);color:var(--ok)}
+.hint{color:var(--muted);font-size:.9rem;margin:6px 0 0}
+.q{border-top:1px solid var(--line);padding:12px 0}
+.q:first-of-type{border-top:0}
+.q p{margin:0 0 6px;font-weight:600}
+.opt{display:flex;gap:8px;align-items:flex-start;padding:4px 0;cursor:pointer}
+.fb{margin-top:6px;padding:8px 10px;border-radius:8px;font-size:.92rem}
+.fb.ok{background:var(--ok-soft);color:var(--ok)}
+.fb.bad{background:var(--bad-soft);color:var(--bad)}
+button.act{background:var(--accent);color:#fff;border:0;border-radius:10px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer;margin-top:8px}
+.score{font-weight:700;margin-top:8px}
+.stars{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);padding:6px 14px;border-radius:999px;font-weight:700;margin-top:10px}
+.btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btns button.act,.row button.act{margin-top:0}
+button.act.alt{background:var(--card);color:var(--accent);border:1px solid var(--accent)}
+button.act:disabled{opacity:.5;cursor:default}
+.game{display:flex;flex-direction:column;gap:10px}
+.big{font-size:1.05rem;font-weight:600;padding:12px 14px;border-radius:10px;background:var(--accent-soft)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row label{display:flex;gap:6px;align-items:center;font-weight:600}
+input[type=number]{width:84px;padding:8px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--card);color:var(--text)}
+.pop{animation:pop .4s}
+@keyframes pop{0%{transform:scale(.85)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion: reduce){.pop{animation:none}}
+footer{color:var(--muted);font-size:.85rem;text-align:center;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Геометрия: оқыту әдістемесі</h1>
+  <p class="sub">7–8–9 сыныптар · әр сыныптан бір тақырып · сабақ жоспары, интерактивтер, анимациялар, ойындар және тест</p>
+  <div class="stars" id="stars">⭐ Жұлдыздар: <span id="starN">0</span> <span style="font-weight:400;font-size:.85rem;color:var(--muted)">(тест пен ойындарды жеңіп жинаңыз)</span></div>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab" role="tab" data-g="7" aria-selected="true">7-сынып<small>Үшбұрыштардың теңдігі</small></button>
+  <button class="tab" role="tab" data-g="8" aria-selected="false">8-сынып<small>Пифагор теоремасы</small></button>
+  <button class="tab" role="tab" data-g="9" aria-selected="false">9-сынып<small>Векторлар және координаталар</small></button>
+</div>
+
+<!-- ============ 7 ============ -->
+<section class="grade active" id="g7">
+  <div class="card">
+    <h2>7-сынып</h2>
+    <p class="topic">Үшбұрыштардың теңдік белгілері (ҚБҚ)</p>
+    <h3>Оқу мақсаты</h3>
+    <p>Оқушы үшбұрыштардың теңдігінің бірінші белгісін (екі қабырға және олардың арасындағы бұрыш) өзі салып байқап, оны қарапайым есепті шешуде қолданады.</p>
+  </div>
+
+  <div class="card">
+    <h2>Сабақ кезеңдері (45 минут)</h2>
+    <table>
+      <tr><th>Уақыт</th><th>Кезең</th><th>Әдіс және әрекет</th></tr>
+      <tr><td>5 мин</td><td>Өзектендіру</td><td>Сұрақ: «Екі үшбұрыш қашан бірдей болады?» Оқушылар өз болжамын жазады.</td></tr>
+      <tr><td>12 мин</td><td>Ашу</td><td>Практикалық іс-әрекет: циркуль мен транспортирмен екі қабырға мен арасындағы бұрыш бойынша үшбұрыш салу, көршінің сызбасымен салыстыру.</td></tr>
+      <tr><td>8 мин</td><td>Модель</td><td>Төмендегі интерактив: оқушы қабырғалар мен бұрышты өзгертіп, үшбұрыштардың қашан беттесетінін бақылайды.</td></tr>
+      <tr><td>10 мин</td><td>Дәлелдеу</td><td>Жұмыс парағы: «берілгені – дәлелдеу керегі – жоспар» бағандарын толтыру.</td></tr>
+      <tr><td>7 мин</td><td>Бекіту, рефлексия</td><td>Тест және «шығу билеті»: бүгін не түсіндім, не түсініксіз.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Интерактив: ҚБҚ белгісін зерттеу</h2>
+    <p class="hint">Сұр сызықты үшбұрыш — мақсатты үшбұрыш (a = 6, b = 5, γ = 60°). Көк үшбұрышты оған беттестіріңіз.</p>
+    <div class="lab">
+      <svg id="svg7" viewBox="0 0 330 230" role="img" aria-label="Үшбұрыштарды салыстыру"></svg>
+      <div class="ctl">
+        <label>Қабырға a (CB) <span id="v7a">4</span></label>
+        <input type="range" id="r7a" min="3" max="9" step="1" value="4">
+        <label>Қабырға b (CA) <span id="v7b">7</span></label>
+        <input type="range" id="r7b" min="3" max="9" step="1" value="7">
+        <label>Бұрыш γ (∠C) <span id="v7g">100°</span></label>
+        <input type="range" id="r7g" min="30" max="150" step="5" value="100">
+        <div class="out" id="o7"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Анимация: үшбұрышты көшіріп беттестіру</h2>
+    <p class="hint">Қызғылт үшбұрыш қозғалып, айналып барып көк үшбұрышқа дәл түседі. Ойланыңыз: неге олар беттеседі?</p>
+    <svg id="svg7a" viewBox="0 0 400 200" role="img" aria-label="Беттестіру анимациясы"></svg>
+    <div class="btns"><button class="act" id="b7a">▶ Анимацияны қосу</button></div>
+  </div>
+
+  <div class="card">
+    <h2>Ойын: тең үшбұрыштарды тап</h2>
+    <p class="hint">Әр раундта екі үшбұрыш көрсетіледі. Олар ҚБҚ белгісі бойынша тең бе, жоқ па? 5 раундтан кейін жұлдыз аласыз.</p>
+    <div class="game">
+      <svg id="svg7g" viewBox="0 0 400 190" role="img" aria-label="Тең үшбұрыштар ойыны"></svg>
+      <div class="big" id="t7g">Ойынды бастау үшін батырманы басыңыз.</div>
+      <div class="btns">
+        <button class="act" id="s7g">Бастау</button>
+        <button class="act alt" id="y7g" disabled>Тең</button>
+        <button class="act alt" id="n7g" disabled>Тең емес</button>
+        <span id="c7g" class="score"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Оқушылардың типтік қателері</h2>
+    <ul>
+      <li>Теңдікті суретке қарап «көріп» қорытынды жасау, шартта жоқ мәліметті пайдалану.</li>
+      <li>Бұрыш екі қабырғаның <b>арасында</b> болуы міндетті екенін ұмыту.</li>
+      <li>Сәйкес төбелердің реті сақталмай жазылуы (△ABC = △DEF жазуында).</li>
+    </ul>
+    <h3>Үй тапсырмасы</h3>
+    <p>Өз қалауыңыз бойынша екі қабырға мен бұрыш беріп, үшбұрыш салыңыз және сол мәліметтермен басқа үшбұрыш құруға болмайтынын түсіндіріңіз.</p>
+  </div>
+
+  <div class="card">
+    <h2>Тест</h2>
+    <div class="quiz" data-quiz="7"></div>
+  </div>
+</section>
+
+<!-- ============ 8 ============ -->
+<section class="grade" id="g8">
+  <div class="card">
+    <h2>8-сынып</h2>
+    <p class="topic">Пифагор теоремасы</p>
+    <h3>Оқу мақсаты</h3>
+    <p>Оқушы тікбұрышты үшбұрыштың қабырғаларындағы квадраттардың аудандары арқылы a² + b² = c² қатынасын ашады және оны қабырғаны табу есептерінде қолданады.</p>
+  </div>
+
+  <div class="card">
+    <h2>Сабақ кезеңдері (45 минут)</h2>
+    <table>
+      <tr><th>Уақыт</th><th>Кезең</th><th>Әдіс және әрекет</th></tr>
+      <tr><td>5 мин</td><td>Өзектендіру</td><td>Мәселелік жағдаят: 5 м баспалдақ қабырғаға 3 м қашықтықта тұр. Ол қандай биіктікке жетеді?</td></tr>
+      <tr><td>10 мин</td><td>Ашу</td><td>Қағаздан қиылған квадраттар: кіші екі квадратты үлкен квадрат үстіне орналастыру арқылы аудандарды салыстыру.</td></tr>
+      <tr><td>10 мин</td><td>Модель</td><td>Төмендегі интерактив: катеттерді өзгертіп, үш квадраттың ауданын бақылау, гипотезаны өз сөзімен тұжырымдау.</td></tr>
+      <tr><td>13 мин</td><td>Қолдану</td><td>Үш деңгейлі есептер: тікелей есептеу, екі қадамды есеп, өмірлік жағдай.</td></tr>
+      <tr><td>7 мин</td><td>Бекіту, рефлексия</td><td>Тест және өзін-өзі бағалау парағы.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Интерактив: квадраттардың аудандары</h2>
+    <p class="hint">Катеттердің ұзындығын өзгертіп, көк және сары квадраттардың ауданының қосындысы жасыл квадраттың ауданына тең екенін тексеріңіз.</p>
+    <div class="lab">
+      <svg id="svg8" viewBox="0 0 380 380" role="img" aria-label="Пифагор теоремасының моделі"></svg>
+      <div class="ctl">
+        <label>Катет a <span id="v8a">3</span></label>
+        <input type="range" id="r8a" min="1" max="8" step="1" value="3">
+        <label>Катет b <span id="v8b">4</span></label>
+        <input type="range" id="r8b" min="1" max="8" step="1" value="4">
+        <div class="out" id="o8"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Анимация: қиып-жапсыру дәлелі</h2>
+    <p class="hint">Бір үлкен квадрат ішіндегі төрт тең тікбұрышты үшбұрыш қозғалады: бос орын алдымен c², сосын a² + b² болып көрінеді.</p>
+    <svg id="svg8a" viewBox="0 0 400 230" role="img" aria-label="Пифагор дәлелінің анимациясы"></svg>
+    <div class="btns">
+      <button class="act" id="b8a">▶ Қозғау</button>
+      <button class="act alt" id="r8a2">↺ Бастапқы күй</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Ойын: баспалдақ есебі</h2>
+    <p class="hint">Баспалдақтың ұзындығы және қабырғадан қашықтығы беріледі. Қабырғада баспалдақ қандай биіктікке жетеді? Жауапты 0,1 дәлдікпен жазыңыз.</p>
+    <div class="game">
+      <svg id="svg8g" viewBox="0 0 400 230" role="img" aria-label="Баспалдақ есебі"></svg>
+      <div class="big" id="t8g">Жаңа есеп алу үшін батырманы басыңыз.</div>
+      <div class="row">
+        <label>Биіктік, м <input type="number" id="i8g" step="0.1" inputmode="decimal"></label>
+        <button class="act" id="c8g" disabled>Тексеру</button>
+        <button class="act alt" id="n8g">Жаңа есеп</button>
+        <span id="s8g" class="score"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Оқушылардың типтік қателері</h2>
+    <ul>
+      <li>Гипотенузаны катет деп қабылдап, c² орнына a² немесе b² қолдану.</li>
+      <li>Түбір алуды ұмыту: c² = 25 болғанда c = 25 деп жазу.</li>
+      <li>Теореманы тікбұрышты емес үшбұрышқа қолдану.</li>
+    </ul>
+    <h3>Үй тапсырмасы</h3>
+    <p>Үйден тікбұрышты үшбұрышқа ұқсас екі нысанды (мысалы, есік немесе кітап) өлшеп, диагоналін Пифагор теоремасымен есептеп, шынайы өлшеммен салыстырыңыз.</p>
+  </div>
+
+  <div class="card">
+    <h2>Тест</h2>
+    <div class="quiz" data-quiz="8"></div>
+  </div>
+</section>
+
+<!-- ============ 9 ============ -->
+<section class="grade" id="g9">
+  <div class="card">
+    <h2>9-сынып</h2>
+    <p class="topic">Векторлар және координаталар әдісі</p>
+    <h3>Оқу мақсаты</h3>
+    <p>Оқушы вектордың координаталарын және ұзындығын табады, векторларды қосуды координаталар арқылы орындайды және оны геометриялық есепте қолданады.</p>
+  </div>
+
+  <div class="card">
+    <h2>Сабақ кезеңдері (45 минут)</h2>
+    <table>
+      <tr><th>Уақыт</th><th>Кезең</th><th>Әдіс және әрекет</th></tr>
+      <tr><td>5 мин</td><td>Өзектендіру</td><td>Сұрақ: «Қала картасында бір нүктеден екінші нүктеге жолды қалай дәл сипаттауға болады?»</td></tr>
+      <tr><td>10 мин</td><td>Ашу</td><td>Координаталық торда вектор салу: бастапқы және соңғы нүктенің координаталарынан вектор координаталарын табу ережесін оқушылар өздері тұжырымдайды.</td></tr>
+      <tr><td>12 мин</td><td>Модель</td><td>Төмендегі интерактив: нүктелерді жылжытып, вектор қосу ережесін (параллелограмм) және координаталарды бақылау.</td></tr>
+      <tr><td>12 мин</td><td>Қолдану</td><td>Бір есепті екі тәсілмен шығару: геометриялық және координаталық, тәсілдерді салыстыру.</td></tr>
+      <tr><td>6 мин</td><td>Бекіту, рефлексия</td><td>Тест және «үш сөйлем» рефлексиясы.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Интерактив: векторларды қосу</h2>
+    <p class="hint">Қызыл және көк нүктелерді тінтуірмен немесе саусақпен жылжытыңыз. Нүктелер бүтін координаталарға тіреледі.</p>
+    <div class="lab">
+      <svg id="svg9" viewBox="-10 -10 20 20" role="img" aria-label="Векторлар моделі"></svg>
+      <div class="ctl">
+        <div class="out" id="o9"></div>
+        <p class="hint">Бақылау: a + b координаталары сәйкес координаталардың қосындысына тең екенін тексеріңіз.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Анимация: вектор бойынша жылжу</h2>
+    <p class="hint">Үшбұрыш a(4; 2) векторы бойынша параллель көшіріледі. Әр төбе бірдей қашықтыққа және бір бағытқа жылжиды.</p>
+    <svg id="svg9a" viewBox="-2 -8 14 11" role="img" aria-label="Параллель көшіру анимациясы"></svg>
+    <div class="btns">
+      <button class="act" id="b9a">▶ Жылжыту</button>
+      <button class="act alt" id="r9a">↺ Қайтару</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Ойын: қазына іздеу</h2>
+    <p class="hint">Торда қазына бар. Вектор координаталарын енгізіп, кемені қазынаға жеткізіңіз. Кеме әр қадамда (x; y) вектор бойынша жылжиды.</p>
+    <div class="game">
+      <svg id="svg9g" viewBox="-1 -9 12 10" role="img" aria-label="Қазына іздеу"></svg>
+      <div class="big" id="t9g">Ойынды бастау үшін батырманы басыңыз.</div>
+      <div class="row">
+        <label>x <input type="number" id="x9g" step="1" value="0"></label>
+        <label>y <input type="number" id="y9g" step="1" value="0"></label>
+        <button class="act" id="m9g" disabled>Жылжыту</button>
+        <button class="act alt" id="n9g">Жаңа ойын</button>
+      </div>
+      <div class="score" id="s9g"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Оқушылардың типтік қателері</h2>
+    <ul>
+      <li>Вектор координатасын «басы минус соңы» деп табу (дұрысы: соңы минус басы).</li>
+      <li>Вектор ұзындығын табуда түбір алуды ұмыту: |a| = √(x² + y²).</li>
+      <li>Вектор мен кесіндіні шатастыру: векторда бағыт бар.</li>
+    </ul>
+    <h3>Үй тапсырмасы</h3>
+    <p>Координаталық жазықтықта үш нүкте беріліп, олардан төртбұрыш жасаңыз және оның параллелограмм екенін векторлар арқылы дәлелдеңіз.</p>
+  </div>
+
+  <div class="card">
+    <h2>Тест</h2>
+    <div class="quiz" data-quiz="9"></div>
+  </div>
+</section>
+
+<footer>Геометрияны оқыту әдістемесі · практикалық сабаққа арналған оқу сайты</footer>
+</div>
+
+<script>
+(function(){
+  const NS = "http://www.w3.org/2000/svg";
+  const $ = id => document.getElementById(id);
+
+  /* ---------- Tabs ---------- */
+  document.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", b === btn ? "true" : "false"));
+      document.querySelectorAll(".grade").forEach(s => s.classList.toggle("active", s.id === "g" + btn.dataset.g));
+    });
+  });
+
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  /* ---------- 7: triangles (SAS) ---------- */
+  const T7 = {a: 6, b: 5, g: 60}, S7 = 18, C7 = {x: 150, y: 200};
+  function tri7(a, b, gDeg) {
+    const g = gDeg * Math.PI / 180;
+    return {
+      C: [C7.x, C7.y],
+      B: [C7.x + a * S7, C7.y],
+      A: [C7.x + b * S7 * Math.cos(g), C7.y - b * S7 * Math.sin(g)]
+    };
+  }
+  function draw7() {
+    const a = +$("r7a").value, b = +$("r7b").value, g = +$("r7g").value;
+    $("v7a").textContent = a; $("v7b").textContent = b; $("v7g").textContent = g + "°";
+    const t = tri7(T7.a, T7.b, T7.g), u = tri7(a, b, g);
+    const pts = p => [p.A, p.B, p.C].map(q => q.join(",")).join(" ");
+    const label = (q, s, dx, dy) => `<text x="${q[0] + dx}" y="${q[1] + dy}" font-size="14" fill="${css("--text")}" font-weight="700">${s}</text>`;
+    $("svg7").innerHTML =
+      `<polygon points="${pts(t)}" fill="none" stroke="${css("--ghost")}" stroke-width="2.5" stroke-dasharray="6 4"/>` +
+      `<polygon points="${pts(u)}" fill="${css("--fill")}" fill-opacity=".7" stroke="${css("--accent")}" stroke-width="2.5"/>` +
+      label(u.C, "C", -14, 14) + label(u.B, "B", 6, 14) + label(u.A, "A", -4, -8);
+    const eqA = a === T7.a, eqB = b === T7.b, eqG = g === T7.g;
+    const c = Math.sqrt(a*a + b*b - 2*a*b*Math.cos(g*Math.PI/180));
+    const o = $("o7");
+    const mark = ok => ok ? "✔" : "✘";
+    let txt = `a ${mark(eqA)} &nbsp; b ${mark(eqB)} &nbsp; γ ${mark(eqG)}<br>Үшінші қабырға c ≈ ${c.toFixed(2)}<br>`;
+    if (eqA && eqB && eqG) {
+      txt += "<b>Үшбұрыштар беттесті.</b> Екі қабырға мен олардың арасындағы бұрыш тең болса, үшбұрыштар тең (ҚБҚ белгісі).";
+      o.className = "out ok";
+    } else {
+      const n = [eqA, eqB, eqG].filter(Boolean).length;
+      txt += n === 2 ? "Екі параметр тең, бірақ үшінші өзгеше, сондықтан үшбұрыштар беттеспейді." : "Үшбұрыштар әлі беттескен жоқ. Үш параметрді де тең ету керек.";
+      o.className = "out";
+    }
+    o.innerHTML = txt;
+  }
+  ["r7a", "r7b", "r7g"].forEach(id => $(id).addEventListener("input", draw7));
+
+  /* ---------- 8: Pythagoras ---------- */
+  const S8 = 14, P8 = {x: 130, y: 250};
+  function draw8() {
+    const a = +$("r8a").value, b = +$("r8b").value;
+    $("v8a").textContent = a; $("v8b").textContent = b;
+    const s = S8, P = P8;
+    const A = [P.x, P.y - b * s], B = [P.x + a * s, P.y];
+    const n = [b * s, -a * s];
+    const hyp = [A, B, [B[0] + n[0], B[1] + n[1]], [A[0] + n[0], A[1] + n[1]]];
+    const poly = (pts, fill) => `<polygon points="${pts.map(q => q.join(",")).join(" ")}" fill="${fill}" fill-opacity=".85" stroke="${css("--text")}" stroke-width="1.5"/>`;
+    const sqB = [[P.x, P.y], [P.x + a * s, P.y], [P.x + a * s, P.y + a * s], [P.x, P.y + a * s]];
+    const sqA = [[P.x, P.y], [P.x - b * s, P.y], [P.x - b * s, P.y - b * s], [P.x, P.y - b * s]];
+    const cen = pts => [pts.reduce((t, q) => t + q[0], 0) / 4, pts.reduce((t, q) => t + q[1], 0) / 4];
+    const txt = (pts, v) => { const c = cen(pts); return `<text x="${c[0]}" y="${c[1] + 5}" text-anchor="middle" font-size="15" font-weight="700" fill="${css("--text")}">${v}</text>`; };
+    $("svg8").innerHTML =
+      poly(sqA, css("--fill")) + poly(sqB, css("--fill2")) + poly(hyp, css("--fill3")) +
+      `<polygon points="${P.x},${P.y} ${A[0]},${A[1]} ${B[0]},${B[1]}" fill="${css("--card")}" stroke="${css("--text")}" stroke-width="2"/>` +
+      `<rect x="${P.x}" y="${P.y - 10}" width="10" height="10" fill="none" stroke="${css("--text")}" stroke-width="1.5"/>` +
+      txt(sqA, "b² = " + b*b) + txt(sqB, "a² = " + a*a) + txt(hyp, "c² = " + (a*a + b*b));
+    const c2 = a*a + b*b, c = Math.sqrt(c2), o = $("o8");
+    const isInt = Number.isInteger(c);
+    o.className = isInt ? "out ok" : "out";
+    o.innerHTML = `a² + b² = ${a*a} + ${b*b} = ${c2} = c²<br>c = √${c2} ≈ ${c.toFixed(2)}` + (isInt ? `<br><b>Пифагор үштігі: ${a}, ${b}, ${c}</b>` : "");
+  }
+  ["r8a", "r8b"].forEach(id => $(id).addEventListener("input", draw8));
+
+  /* ---------- 9: vectors ---------- */
+  const V = {a: [3, 2], b: [-1, 4]};
+  const svg9 = $("svg9");
+  let drag = null;
+  function arrow(x1, y1, x2, y2, color, w) {
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, h = 0.6;
+    const bx = x2 - ux * h, by = y2 - uy * h, px = -uy * h * 0.45, py = ux * h * 0.45;
+    return `<line x1="${x1}" y1="${-y1}" x2="${bx}" y2="${-by}" stroke="${color}" stroke-width="${w}"/>` +
+           `<polygon points="${x2},${-y2} ${bx + px},${-(by + py)} ${bx - px},${-(by - py)}" fill="${color}"/>`;
+  }
+  function draw9() {
+    const [ax, ay] = V.a, [bx, by] = V.b, sx = ax + bx, sy = ay + by;
+    let g = "";
+    for (let i = -10; i <= 10; i++) {
+      const major = i === 0;
+      g += `<line x1="${i}" y1="-10" x2="${i}" y2="10" stroke="${major ? css("--text") : css("--line")}" stroke-width="${major ? 0.07 : 0.03}"/>`;
+      g += `<line x1="-10" y1="${i}" x2="10" y2="${i}" stroke="${major ? css("--text") : css("--line")}" stroke-width="${major ? 0.07 : 0.03}"/>`;
+    }
+    const red = "#d6453d", blue = "#2f6fe0", green = "#1f9d62";
+    g += `<line x1="${ax}" y1="${-ay}" x2="${sx}" y2="${-sy}" stroke="${blue}" stroke-width="0.06" stroke-dasharray="0.3 0.2"/>`;
+    g += `<line x1="${bx}" y1="${-by}" x2="${sx}" y2="${-sy}" stroke="${red}" stroke-width="0.06" stroke-dasharray="0.3 0.2"/>`;
+    g += arrow(0, 0, ax, ay, red, 0.12) + arrow(0, 0, bx, by, blue, 0.12) + arrow(0, 0, sx, sy, green, 0.14);
+    g += `<circle data-d="a" cx="${ax}" cy="${-ay}" r="0.55" fill="${red}" style="cursor:grab"/>`;
+    g += `<circle data-d="b" cx="${bx}" cy="${-by}" r="0.55" fill="${blue}" style="cursor:grab"/>`;
+    const lab = (x, y, t, c) => `<text x="${x + 0.3}" y="${-y - 0.4}" font-size="0.8" font-weight="700" fill="${c}">${t}</text>`;
+    g += lab(ax, ay, "a", red) + lab(bx, by, "b", blue) + lab(sx, sy, "a+b", green);
+    svg9.innerHTML = g;
+    const len = (x, y) => Math.sqrt(x*x + y*y).toFixed(2);
+    $("o9").innerHTML =
+      `<span style="color:${red}"><b>a</b> = (${ax}; ${ay})</span>, |a| = ${len(ax, ay)}<br>` +
+      `<span style="color:${blue}"><b>b</b> = (${bx}; ${by})</span>, |b| = ${len(bx, by)}<br>` +
+      `<span style="color:${green}"><b>a + b</b> = (${ax}+${bx}; ${ay}+${by}) = (${sx}; ${sy})</span>, |a+b| = ${len(sx, sy)}`;
+  }
+  function pt9(e) {
+    const p = svg9.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+    const q = p.matrixTransform(svg9.getScreenCTM().inverse());
+    const c = v => Math.max(-5, Math.min(5, Math.round(v)));
+    return [c(q.x), c(-q.y)];
+  }
+  svg9.addEventListener("pointerdown", e => {
+    const d = e.target.getAttribute && e.target.getAttribute("data-d");
+    if (d) { drag = d; svg9.setPointerCapture(e.pointerId); e.preventDefault(); }
+  });
+  svg9.addEventListener("pointermove", e => {
+    if (!drag) return;
+    const p = pt9(e);
+    if (p[0] !== V[drag][0] || p[1] !== V[drag][1]) { V[drag] = p; draw9(); }
+  });
+  const stop = () => { drag = null; };
+  svg9.addEventListener("pointerup", stop);
+  svg9.addEventListener("pointercancel", stop);
+
+  /* ---------- Quizzes ---------- */
+  const QUIZ = {
+    7: [
+      {q: "Үшбұрыштардың теңдігінің бірінші белгісі қалай айтылады?",
+       o: ["Екі қабырға және олардың арасындағы бұрыш тең", "Екі қабырға және біреуіне іргелес емес бұрыш тең", "Үш бұрыш тең"], c: 0,
+       e: "Бұрыш екі қабырғаның арасында болуы шарт."},
+      {q: "AB = DE, AC = DF және ∠A = ∠D болса, △ABC және △DEF неге тең?",
+       o: ["Үш қабырғасы бойынша", "Екі қабырға және арасындағы бұрыш бойынша", "Екі бұрыш және қабырға бойынша"], c: 1,
+       e: "∠A қабырғалар AB мен AC-нің арасында орналасқан."},
+      {q: "Үш бұрышы тең үшбұрыштар әрқашан тең бола ма?",
+       o: ["Иә, әрқашан", "Жоқ, олар ұқсас болуы мүмкін, бірақ тең болмауы мүмкін"], c: 1,
+       e: "Бұрыштары бірдей, бірақ өлшемдері әртүрлі үшбұрыштар болады."}
+    ],
+    8: [
+      {q: "Катеттері 6 және 8 болса, гипотенуза неге тең?",
+       o: ["10", "12", "14"], c: 0, e: "6² + 8² = 36 + 64 = 100, c = 10."},
+      {q: "Гипотенузасы 13, бір катеті 5 болса, екінші катет неге тең?",
+       o: ["8", "12", "18"], c: 1, e: "b² = 13² − 5² = 169 − 25 = 144, b = 12."},
+      {q: "Қабырғалары 4, 5, 6 болатын үшбұрыш тікбұрышты ма?",
+       o: ["Иә", "Жоқ"], c: 1, e: "4² + 5² = 41, ал 6² = 36. Тең емес, сондықтан тікбұрышты емес."}
+    ],
+    9: [
+      {q: "A(1; 2) және B(4; 6) болса, AB векторының координаталары қандай?",
+       o: ["(3; 4)", "(5; 8)", "(−3; −4)"], c: 0, e: "Соңы минус басы: (4−1; 6−2) = (3; 4)."},
+      {q: "a(3; 4) векторының ұзындығы неге тең?",
+       o: ["5", "7", "25"], c: 0, e: "|a| = √(9 + 16) = √25 = 5."},
+      {q: "a(2; −1) және b(−3; 4) болса, a + b неге тең?",
+       o: ["(−1; 3)", "(5; −5)", "(−1; 5)"], c: 0, e: "(2−3; −1+4) = (−1; 3)."}
+    ]
+  };
+  document.querySelectorAll(".quiz").forEach(box => {
+    const key = box.dataset.quiz, items = QUIZ[key];
+    items.forEach((it, i) => {
+      const d = document.createElement("div"); d.className = "q";
+      d.innerHTML = `<p>${i + 1}. ${it.q}</p>` + it.o.map((t, j) =>
+        `<label class="opt"><input type="radio" name="q${key}_${i}" value="${j}"> <span>${t}</span></label>`).join("") +
+        `<div class="fb" hidden></div>`;
+      box.appendChild(d);
+    });
+    const btn = document.createElement("button"); btn.className = "act"; btn.textContent = "Тексеру";
+    const sc = document.createElement("div"); sc.className = "score";
+    btn.addEventListener("click", () => {
+      let ok = 0;
+      items.forEach((it, i) => {
+        const sel = box.querySelector(`input[name="q${key}_${i}"]:checked`);
+        const fb = box.querySelectorAll(".fb")[i]; fb.hidden = false;
+        if (!sel) { fb.className = "fb bad"; fb.textContent = "Жауапты таңдаңыз."; }
+        else if (+sel.value === it.c) { ok++; fb.className = "fb ok"; fb.textContent = "Дұрыс. " + it.e; }
+        else { fb.className = "fb bad"; fb.textContent = "Қате. " + it.e; }
+      });
+      sc.textContent = `Нәтиже: ${ok} / ${items.length}`;
+    });
+    box.appendChild(btn); box.appendChild(sc);
+  });
+
+
+  /* ---------- Animations and games: event handlers ---------- */
+  let animationTimers = {};
+  function cancelAnimation(key) {
+    if (animationTimers[key]) {
+      clearInterval(animationTimers[key]);
+      animationTimers[key] = null;
+    }
+  }
+
+  // 7-сынып: екі үшбұрыштың беттесу анимациясы
+  function draw7a(progress = 0) {
+    const svg = $("svg7a");
+    const target = "80,150 180,150 125,65";
+    const start = "255,45 355,45 300,130";
+    const x = 175 * progress;
+    const y = 105 * progress;
+    const points = progress >= 1 ? target : start;
+    svg.innerHTML = `
+      <polygon points="80,150 180,150 125,65" fill="none" stroke="${css("--ghost")}" stroke-width="2.5" stroke-dasharray="6 4"/>
+      <polygon points="${points}" fill="${css("--fill2")}" fill-opacity=".85" stroke="#d85c9a" stroke-width="2.5"
+        style="transform-origin:300px 75px; transform: translate(${-x}px, ${y}px) rotate(${-180 * progress}deg); transition: transform .08s linear"/>
+      <text x="20" y="25" fill="${css("--text")}" font-size="12">Қызғылт үшбұрышты көк/сұр үшбұрышқа беттестіру</text>`;
+  }
+  draw7a(0);
+  $("b7a").addEventListener("click", () => {
+    cancelAnimation("a7");
+    let p = 0;
+    $("b7a").disabled = true;
+    draw7a(0);
+    animationTimers.a7 = setInterval(() => {
+      p = Math.min(1, p + 0.04);
+      draw7a(p);
+      if (p >= 1) {
+        cancelAnimation("a7");
+        $("b7a").disabled = false;
+        $("b7a").textContent = "↺ Қайта ойнату";
+      }
+    }, 35);
+  });
+
+  // 8-сынып: Пифагор дәлелінің қарапайым кезеңдік анимациясы
+  let stage8 = 0;
+  function draw8a() {
+    const svg = $("svg8a");
+    const labels = [
+      "1-кезең: төрт бірдей тікбұрышты үшбұрыш",
+      "2-кезең: ортадағы бос орын — c²",
+      "3-кезең: бос орын ауданы — a² + b² = c²"
+    ];
+    const a = stage8 === 0 ? 0 : stage8 === 1 ? 1 : 2;
+    svg.innerHTML = `
+      <rect x="65" y="35" width="270" height="165" rx="4" fill="none" stroke="${css("--text")}" stroke-width="2"/>
+      <polygon points="65,35 200,35 65,120" fill="${css("--fill")}" stroke="${css("--accent")}" stroke-width="1.5"/>
+      <polygon points="335,35 335,120 200,35" fill="${css("--fill2")}" stroke="${css("--accent")}" stroke-width="1.5"/>
+      <polygon points="65,200 65,120 200,200" fill="${css("--fill3")}" stroke="${css("--accent")}" stroke-width="1.5"/>
+      <polygon points="335,200 200,200 335,120" fill="${css("--fill")}" stroke="${css("--accent")}" stroke-width="1.5"/>
+      <polygon points="150,85 250,85 250,150 150,150" fill="${a===1 ? css("--fill3") : a===2 ? css("--fill2") : css("--card")}" stroke="${css("--accent")}" stroke-width="2"/>
+      <text x="200" y="122" text-anchor="middle" font-size="18" font-weight="700" fill="${css("--text")}">${a===1 ? "c²" : a===2 ? "a² + b²" : "?"}</text>
+      <text x="200" y="20" text-anchor="middle" font-size="12" fill="${css("--text")}">${labels[a]}</text>`;
+  }
+  draw8a();
+  $("b8a").addEventListener("click", () => {
+    stage8 = (stage8 + 1) % 3;
+    draw8a();
+    $("b8a").textContent = stage8 === 2 ? "↺ Қайта бастау" : "▶ Келесі кезең";
+  });
+  $("r8a2").addEventListener("click", () => {
+    stage8 = 0;
+    draw8a();
+    $("b8a").textContent = "▶ Қозғау";
+  });
+
+  // 9-сынып: үшбұрышты (4; 2) векторы бойынша көшіру
+  let shift9 = 0;
+  function draw9a() {
+    const svg = $("svg9a");
+    const tx = 4 * shift9, ty = -2 * shift9;
+    svg.innerHTML = `
+      <defs><pattern id="grid9a" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="${css("--line")}" stroke-width="1"/></pattern></defs>
+      <rect x="-20" y="-160" width="280" height="220" fill="url(#grid9a)"/>
+      <g transform="translate(0 0)">
+        <polygon points="0,0 60,0 20,-60" fill="${css("--fill")}" fill-opacity=".8" stroke="${css("--accent")}" stroke-width="2"/>
+      </g>
+      <g transform="translate(${tx*20} ${ty*20})">
+        <polygon points="0,0 60,0 20,-60" fill="${css("--fill2")}" fill-opacity=".8" stroke="#d85c9a" stroke-width="2"/>
+      </g>
+      <text x="-10" y="45" font-size="11" fill="${css("--text")}">${shift9===0 ? "Бастапқы орын" : shift9===1 ? "Жылжу басталды" : "a(4; 2) векторы бойынша көшірілді"}</text>`;
+  }
+  draw9a();
+  $("b9a").addEventListener("click", () => {
+    shift9 = shift9 === 2 ? 0 : shift9 + 1;
+    draw9a();
+    $("b9a").textContent = shift9 === 2 ? "↺ Қайта ойнату" : "▶ Жылжыту";
+  });
+  $("r9a").addEventListener("click", () => {
+    shift9 = 0;
+    draw9a();
+    $("b9a").textContent = "▶ Жылжыту";
+  });
+
+  // 7-сынып ойыны
+  let round7 = 0, score7 = 0, answer7 = false, correct7 = false;
+  function newRound7() {
+    if (round7 >= 5) {
+      $("t7g").textContent = `Ойын аяқталды! Нәтиже: ${score7}/5.`;
+      $("s7g").disabled = false;
+      $("y7g").disabled = $("n7g").disabled = true;
+      if (score7 >= 4) addStars(1);
+      return;
+    }
+    const equal = Math.random() > .4;
+    correct7 = equal;
+    const a = 55, b = equal ? 55 : 75;
+    $("svg7g").innerHTML = `
+      <polygon points="45,145 135,145 85,65" fill="${css("--fill")}" stroke="${css("--accent")}" stroke-width="2"/>
+      <polygon points="245,145 ${245+a*1.2},145 275,${equal?65:85}" fill="${css("--fill2")}" stroke="#d85c9a" stroke-width="2"/>
+      <text x="90" y="170" text-anchor="middle" fill="${css("--text")}" font-size="12">1-үшбұрыш</text>
+      <text x="290" y="170" text-anchor="middle" fill="${css("--text")}" font-size="12">2-үшбұрыш</text>`;
+    $("t7g").textContent = "Үшбұрыштар ҚБҚ бойынша тең бе?";
+    $("y7g").disabled = $("n7g").disabled = false;
+    $("s7g").disabled = true;
+    answer7 = false;
+  }
+  function addStars(n) {
+    const node = $("starN");
+    node.textContent = String((parseInt(node.textContent, 10) || 0) + n);
+  }
+  $("s7g").addEventListener("click", () => {
+    round7 = 0; score7 = 0;
+    $("c7g").textContent = "";
+    newRound7();
+  });
+  function choose7(value) {
+    if (answer7 || $("y7g").disabled) return;
+    answer7 = true;
+    if (value === correct7) score7++;
+    round7++;
+    $("c7g").textContent = `Ағымдағы нәтиже: ${score7}/${round7}`;
+    $("t7g").textContent = value === correct7 ? "Дұрыс жауап!" : "Бұл жолы қате.";
+    $("y7g").disabled = $("n7g").disabled = true;
+    setTimeout(newRound7, 650);
+  }
+  $("y7g").addEventListener("click", () => choose7(true));
+  $("n7g").addEventListener("click", () => choose7(false));
+
+  // 8-сынып баспалдақ ойыны
+  let ladder = {hyp: 5, base: 3};
+  function newLadder() {
+    ladder = {hyp: Math.floor(Math.random()*5)+5, base: Math.floor(Math.random()*4)+2};
+    if (ladder.base >= ladder.hyp) ladder.base = ladder.hyp - 1;
+    const h = Math.sqrt(ladder.hyp**2 - ladder.base**2);
+    $("svg8g").innerHTML = `
+      <path d="M 70 190 L 70 35 M 70 190 L 330 190 M 70 190 L 330 35" fill="none" stroke="${css("--text")}" stroke-width="3"/>
+      <path d="M 330 35 L 330 190" fill="none" stroke="${css("--accent")}" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="180" y="215" text-anchor="middle" fill="${css("--text")}" font-size="13">Қабырғадан қашықтығы: ${ladder.base} м</text>
+      <text x="195" y="95" fill="${css("--text")}" font-size="13">Баспалдақ: ${ladder.hyp} м</text>`;
+    $("t8g").textContent = `Баспалдақ ${ladder.hyp} м, қабырғадан ${ladder.base} м. Биіктікті табыңыз.`;
+    $("i8g").value = "";
+    $("c8g").disabled = false;
+    $("s8g").textContent = "";
+  }
+  $("n8g").addEventListener("click", newLadder);
+  $("c8g").addEventListener("click", () => {
+    const val = parseFloat(String($("i8g").value).replace(",", "."));
+    const expected = Math.sqrt(ladder.hyp**2 - ladder.base**2);
+    if (!Number.isFinite(val)) {
+      $("s8g").textContent = "Алдымен жауапты енгізіңіз.";
+      return;
+    }
+    const ok = Math.abs(val - expected) < 0.11;
+    $("s8g").textContent = ok ? "Дұрыс! Жарайсыз." : `Қайта көріңіз. Дұрыс мәні шамамен ${expected.toFixed(1)} м.`;
+    if (ok) { addStars(1); $("c8g").disabled = true; }
+  });
+
+  // 9-сынып қазына ойыны
+  let ship = {x:0, y:0}, treasure = {x:4, y:3};
+  function draw9g() {
+    const svg = $("svg9g");
+    let content = "";
+    for (let x=0; x<=10; x++) content += `<line x1="${x}" y1="0" x2="${x}" y2="-9" stroke="${css("--line")}" stroke-width=".03"/>`;
+    for (let y=0; y<=9; y++) content += `<line x1="0" y1="${-y}" x2="10" y2="${-y}" stroke="${css("--line")}" stroke-width=".03"/>`;
+    content += `<text x="${treasure.x}" y="${-treasure.y-.3}" font-size=".8">💎</text>`;
+    content += `<circle cx="${ship.x}" cy="${-ship.y}" r=".35" fill="${css("--accent")}"/><text x="${ship.x+.3}" y="${-ship.y-.3}" font-size=".7" fill="${css("--text")}">🚢</text>`;
+    svg.innerHTML = content;
+  }
+  function newTreasure() {
+    ship = {x:0, y:0};
+    treasure = {x:Math.floor(Math.random()*7)+3, y:Math.floor(Math.random()*6)+2};
+    $("t9g").textContent = "Кемені қазынаға жеткізу үшін келесі қадамның вектор координаталарын енгізіңіз.";
+    $("s9g").textContent = "";
+    $("m9g").disabled = false;
+    draw9g();
+  }
+  $("n9g").addEventListener("click", newTreasure);
+  $("m9g").addEventListener("click", () => {
+    const dx = Number($("x9g").value), dy = Number($("y9g").value);
+    if (!Number.isFinite(dx) || !Number.isFinite(dy)) return;
+    ship.x += dx; ship.y += dy;
+    draw9g();
+    if (ship.x === treasure.x && ship.y === treasure.y) {
+      $("t9g").textContent = "Қазына табылды! Жарайсыз!";
+      $("s9g").textContent = "⭐ +1 жұлдыз";
+      addStars(1); $("m9g").disabled = true;
+    } else {
+      $("s9g").textContent = `Кеменің орны: (${ship.x}; ${ship.y}). Қазынаға дейін: (${treasure.x-ship.x}; ${treasure.y-ship.y}).`;
+    }
+  });
+  newLadder();
+  newTreasure();
+
+
+  /* ---------- init ---------- */
+  draw7(); draw8(); draw9();
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { draw7(); draw8(); draw9(); });
+})();
+</script>
+</body>
+</html>
